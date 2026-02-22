@@ -196,6 +196,22 @@ const Navbar = () => {
 const HeroNodeCanvas = () => {
     const canvasRef = useRef(null);
 
+    // Define central "Anchor" applications (the heavy lifters)
+    const ANCHORS = [
+        { slug: 'n8n', color: 'rgba(250, 100, 100, 0.9)' },
+        { slug: 'make', color: 'rgba(150, 100, 250, 0.9)' },
+        { slug: 'claude', color: 'rgba(200, 150, 100, 0.9)' },
+        { slug: 'anthropic', color: 'rgba(200, 150, 100, 0.9)' },
+        { slug: 'notion', color: 'rgba(200, 200, 200, 0.9)' },
+        { slug: 'hubspot', color: 'rgba(250, 150, 50, 0.9)' }
+    ];
+
+    // Define smaller "Satellite" applications that connect to anchors
+    const SATELLITES = [
+        'youtube', 'tiktok', 'instagram', 'facebook', 'slack', 'gmail',
+        'calendly', 'elevenlabs', 'salesforce', 'zendesk', 'stripe', 'discord', 'shopify'
+    ];
+
     useEffect(() => {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d', { alpha: true });
@@ -209,24 +225,40 @@ const HeroNodeCanvas = () => {
         window.addEventListener('resize', setSize);
 
         const loadedIcons = {};
-        SITE_CONTENT.heroNodes.forEach(node => {
-            node.tools.forEach(slug => {
-                if (!loadedIcons[slug]) {
-                    const img = new Image();
-                    img.src = `https://cdn.simpleicons.org/${slug}/cccccc`;
-                    loadedIcons[slug] = img;
-                }
-            });
+        const allIcons = [...ANCHORS.map(a => a.slug), ...SATELLITES];
+
+        allIcons.forEach(slug => {
+            if (!loadedIcons[slug]) {
+                const img = new Image();
+                img.src = `https://cdn.simpleicons.org/${slug}/cccccc`;
+                loadedIcons[slug] = img;
+            }
         });
 
-        const nodes = Array.from({ length: 45 }, (_, i) => ({
+        // Initialize Central Anchors
+        const anchors = ANCHORS.map((anchor, i) => ({
+            ...anchor,
+            x: (canvas.width / ANCHORS.length) * i + (canvas.width / ANCHORS.length) / 2,
+            y: canvas.height / 2 + (Math.random() - 0.5) * 200,
+            vx: (Math.random() - 0.5) * 0.4,
+            vy: (Math.random() - 0.5) * 0.4,
+            radius: 4,
+            isAnchor: true
+        }));
+
+        // Initialize Satellite Nodes orbiting around
+        const satellites = Array.from({ length: 30 }, () => ({
+            slug: SATELLITES[Math.floor(Math.random() * SATELLITES.length)],
             x: Math.random() * canvas.width,
             y: Math.random() * canvas.height,
-            vx: (Math.random() - 0.5) * 0.8,
-            vy: (Math.random() - 0.5) * 0.8,
-            radius: Math.random() * 2 + 1,
-            data: i % 2 === 0 ? SITE_CONTENT.heroNodes[Math.floor(Math.random() * SITE_CONTENT.heroNodes.length)] : null
+            vx: (Math.random() - 0.5) * 1.5,
+            vy: (Math.random() - 0.5) * 1.5,
+            radius: 2,
+            isAnchor: false,
+            targetAnchor: anchors[Math.floor(Math.random() * anchors.length)] // Assign to a random anchor
         }));
+
+        const nodes = [...anchors, ...satellites];
 
         let mouse = { x: -1000, y: -1000 };
         const onMouseMove = (e) => {
@@ -239,69 +271,62 @@ const HeroNodeCanvas = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             nodes.forEach(node => {
+                // Move nodes
                 node.x += node.vx;
                 node.y += node.vy;
 
+                // Bounce off edges
                 if (node.x < 0 || node.x > canvas.width) node.vx *= -1;
                 if (node.y < 0 || node.y > canvas.height) node.vy *= -1;
 
-                ctx.fillStyle = 'rgba(250, 248, 245, 0.4)';
+                // Draw base dot
+                ctx.fillStyle = node.isAnchor ? node.color : 'rgba(250, 248, 245, 0.3)';
                 ctx.beginPath();
                 ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
                 ctx.fill();
 
+                // Draw connections between Satellites and their Anchor
+                if (!node.isAnchor) {
+                    const dx = node.targetAnchor.x - node.x;
+                    const dy = node.targetAnchor.y - node.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < 300) {
+                        ctx.beginPath();
+                        ctx.moveTo(node.x, node.y);
+                        ctx.lineTo(node.targetAnchor.x, node.targetAnchor.y);
+                        ctx.strokeStyle = `rgba(250, 248, 245, ${0.1 - dist / 3000})`;
+                        ctx.stroke();
+                    }
+                }
+
+                // Mouse Interaction Logic
                 if (mouse.x > -500) {
                     const dx = mouse.x - node.x;
                     const dy = mouse.y - node.y;
                     const dist = Math.sqrt(dx * dx + dy * dy);
 
-                    if (dist < 250) {
+                    if (dist < 200) {
+                        // Draw connection to mouse
                         ctx.beginPath();
                         ctx.moveTo(node.x, node.y);
                         ctx.lineTo(mouse.x, mouse.y);
-                        // Make line intense champagne
-                        ctx.strokeStyle = `rgba(201, 168, 76, ${0.4 - dist / 250})`;
+                        ctx.strokeStyle = `rgba(201, 168, 76, ${0.3 - dist / 500})`;
                         ctx.lineWidth = 1;
                         ctx.stroke();
 
-                        if (node.data && dist < 160) {
-                            let currentX = node.x + 10;
-                            const startY = node.y - 20;
-
-                            // Draw loaded icons
-                            node.data.tools.forEach((slug) => {
-                                const img = loadedIcons[slug];
-                                if (img && img.complete) {
-                                    ctx.globalAlpha = 0.6;
-                                    ctx.drawImage(img, currentX, startY, 20, 20);
-                                    ctx.globalAlpha = 1.0;
-                                    currentX += 28;
-                                }
-                            });
-
-                            ctx.fillStyle = 'rgba(250, 248, 245, 0.7)';
-                            ctx.font = '10px "Inter", monospace';
-                            ctx.fillText(node.data.names, node.x + 10, node.y + 14);
-
-                            ctx.fillStyle = 'rgba(201, 168, 76, 1)';
-                            ctx.font = 'bold 13px "Inter", sans-serif';
-                            ctx.fillText(`= ${node.data.result}`, node.x + 10, node.y + 30);
+                        // IF close enough to mouse, reveal the app icon
+                        if (dist < 100) {
+                            const img = loadedIcons[node.slug];
+                            if (img && img.complete) {
+                                const imgSize = node.isAnchor ? 32 : 20;
+                                ctx.globalAlpha = node.isAnchor ? 1.0 : 0.7;
+                                ctx.drawImage(img, node.x - (imgSize / 2), node.y - (imgSize + 10), imgSize, imgSize);
+                                ctx.globalAlpha = 1.0;
+                            }
                         }
                     }
                 }
-
-                nodes.forEach(other => {
-                    const dx = other.x - node.x;
-                    const dy = other.y - node.y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < 100) {
-                        ctx.beginPath();
-                        ctx.moveTo(node.x, node.y);
-                        ctx.lineTo(other.x, other.y);
-                        ctx.strokeStyle = `rgba(201, 168, 76, ${0.15 - dist / 100})`;
-                        ctx.stroke();
-                    }
-                });
             });
 
             animationFrameId = requestAnimationFrame(draw);
@@ -898,7 +923,7 @@ const ProcessSteps = () => {
                                         </p>
                                     </div>
                                 </div>
-                                <p className={`text-base md:text-lg md:hidden leading-relaxed mt-4 w-full z-10 ${isActive ? 'text-white/95' : 'text-white/50'}`}>
+                                <p className={`text-base md:text-lg md:hidden leading-relaxed mt-4 w-full z-10 transition-colors duration-500 ${isActive ? 'text-white/95' : 'text-white/50'}`}>
                                     {item.desc}
                                 </p>
 
