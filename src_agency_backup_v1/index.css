@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-obsidian text-ivory font-ui overflow-x-hidden w-full;
+  }
+  
+  ::selection {
+    @apply bg-champagne/30 text-ivory;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Custom easing for magnetic buttons and interactions */
+.magnetic-btn {
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+              background-color 0.3s ease;
+}
+
+.magnetic-btn:hover {
+  transform: scale(1.03);
+}
+
+.btn-hover-layer {
+  position: absolute;
+  inset: 0;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  z-index: 0;
+}
+
+.btn-container:hover .btn-hover-layer {
+  transform: translateY(0);
+}
