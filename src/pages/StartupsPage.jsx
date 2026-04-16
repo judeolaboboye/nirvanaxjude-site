@@ -291,9 +291,9 @@ const StartupsPage = () => {
                     {investorProtocol.map((step, idx) => (
                         <div key={idx} className={`grid md:grid-cols-2 gap-12 md:gap-24 items-center ${idx % 2 !== 0 ? 'md:flex-row-reverse' : ''}`}>
                             <div className="flex flex-col justify-center">
-                                <span className="font-mono text-[#C9A84C]/30 text-7xl font-black mb-6">{step.phase}</span>
-                                <h4 className="text-3xl md:text-4xl font-bold mb-6">{step.title}</h4>
-                                <p className="text-gray-400 leading-relaxed text-lg">{step.desc}</p>
+                                <span className="font-mono text-[#C9A84C]/30 text-6xl md:text-7xl font-black mb-4 md:mb-6">{step.phase}</span>
+                                <h4 className="text-2xl md:text-4xl font-bold mb-4 md:mb-6">{step.title}</h4>
+                                <p className="text-gray-400 leading-relaxed text-base md:text-lg text-pretty">{step.desc}</p>
                             </div>
                             <div className="relative bg-[#080808] p-4 md:p-8 rounded-3xl border border-white/5 shadow-2xl">
                                 {step.linkedinOverlay ? (
@@ -500,12 +500,12 @@ const StartupsPage = () => {
                                 <img
                                     src="/jude.png"
                                     alt="Jude Olaboboye"
-                                    className={`w-full h-full object-cover object-top absolute inset-0 transition-opacity duration-500 ${judeHovered ? 'opacity-0' : 'opacity-100'}`}
+                                    className={`w-full h-full object-cover object-top absolute inset-0 transition-opacity duration-500 hidden md:block ${judeHovered ? 'opacity-0' : 'opacity-100'}`}
                                 />
                                 <img
                                     src="/jude-hover.jpg"
                                     alt="Jude Olaboboye"
-                                    className={`w-full h-full object-cover object-top absolute inset-0 transition-opacity duration-500 ${judeHovered ? 'opacity-100' : 'opacity-0'}`}
+                                    className={`w-full h-full object-cover object-top absolute inset-0 transition-opacity duration-500 opacity-100 md:${judeHovered ? 'opacity-100' : 'opacity-0'}`}
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0F]/40 to-transparent pointer-events-none" />
                             </div>
