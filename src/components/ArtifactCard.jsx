@@ -175,7 +175,20 @@ const ArtifactCard = ({
                                             {localResult && (
                                                 <div className="bg-white/5 border border-white/5 p-6 rounded-2xl animate-in slide-in-from-bottom-4 duration-1000 shadow-2xl">
                                                     <div className="text-[10px] uppercase tracking-widest text-champagne/40 mb-4 border-b border-white/5 pb-2 font-bold">Instance Output Architecture</div>
-                                                    <div className="text-ivory font-ui text-xl leading-relaxed italic">{localResult}</div>
+                                                    <div className="text-ivory font-ui text-xl leading-relaxed italic">
+                                                        {typeof localResult === 'string' && localResult.includes('https://image.pollinations.ai') ? (
+                                                            <div className="flex flex-col gap-4">
+                                                                <div>{localResult.split('https://image.pollinations.ai')[0]}</div>
+                                                                <img 
+                                                                    src={`https://image.pollinations.ai${localResult.split('https://image.pollinations.ai')[1].split(' ')[0].split('\n')[0]}`} 
+                                                                    alt="AI Generated Asset" 
+                                                                    className="w-full rounded-xl border border-white/10 shadow-[0_0_40px_rgba(201,168,76,0.15)] object-cover aspect-square"
+                                                                />
+                                                            </div>
+                                                        ) : (
+                                                            localResult
+                                                        )}
+                                                    </div>
                                                 </div>
                                             )}
                                             {internalNextStep && (
