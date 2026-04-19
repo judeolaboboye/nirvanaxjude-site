@@ -55,16 +55,23 @@ const LeadCaptureModal = ({ isOpen, onClose, onSuccess, artifact }) => {
         setIsSubmitting(true);
 
         try {
+            let finalInput = formData.customInput;
+            if (artifact.id === 'insta-strategy') {
+                finalInput = `Model: ${formData.businessModel || 'N/A'}\nTarget: ${formData.targetAudience || 'N/A'}\nMRR: ${formData.mrr || 'N/A'}`;
+            }
+
             // CRM Logging via Vercel Function or similar (Mocked here for now as requested)
             // In a real prod environment, this would hit a secure endpoint.
             console.log("Logging lead to CRM:", {
                 ...formData,
+                customInput: finalInput,
                 artifactId: artifact.id,
                 executionType: artifact.execution
             });
 
             await new Promise(resolve => setTimeout(resolve, 1000));
-            onSuccess(formData);
+            // Pass the modified formData to onSuccess
+            onSuccess({...formData, customInput: finalInput});
         } catch (err) {
             setError('System Limit: Connectivity Error.');
         } finally {
@@ -146,7 +153,35 @@ const LeadCaptureModal = ({ isOpen, onClose, onSuccess, artifact }) => {
                             </div>
                         ) : (
                             <>
-                                {artifact.requiresInput && (
+                                {artifact.id === 'insta-strategy' ? (
+                                    <div className="bg-white/5 rounded-3xl p-6 border border-champagne/20">
+                                        <label className="font-mono text-[10px] text-champagne uppercase tracking-widest block font-bold mb-4">
+                                            Deep Business Analysis
+                                        </label>
+                                        <div className="space-y-4">
+                                            <input type="text" required placeholder="What is your niche/business model?" className="w-full bg-[#050508] border border-white/10 rounded-2xl px-6 py-3 text-ivory focus:outline-none focus:border-champagne transition-all font-ui text-sm placeholder:text-ivory/20" value={formData.businessModel || ''} onChange={(e) => setFormData({ ...formData, businessModel: e.target.value })} />
+                                            <input type="text" required placeholder="Who is your target audience?" className="w-full bg-[#050508] border border-white/10 rounded-2xl px-6 py-3 text-ivory focus:outline-none focus:border-champagne transition-all font-ui text-sm placeholder:text-ivory/20" value={formData.targetAudience || ''} onChange={(e) => setFormData({ ...formData, targetAudience: e.target.value })} />
+                                            <input type="text" required placeholder="Current Monthly Revenue (MRR)?" className="w-full bg-[#050508] border border-white/10 rounded-2xl px-6 py-3 text-ivory focus:outline-none focus:border-champagne transition-all font-ui text-sm placeholder:text-ivory/20" value={formData.mrr || ''} onChange={(e) => setFormData({ ...formData, mrr: e.target.value })} />
+                                        </div>
+                                    </div>
+                                ) : artifact.id === 'ai-product-gen' ? (
+                                    <div className="bg-white/5 rounded-3xl p-6 border border-champagne/20">
+                                        <label className="font-mono text-[10px] text-champagne uppercase tracking-widest block font-bold mb-4 text-center">
+                                            Asset Ingestion Protocol
+                                        </label>
+                                        <div className="flex flex-col gap-3">
+                                            <button type="button" onClick={() => setFormData({...formData, customInput: 'Demo Uploaded: demo-product.jpg'})} className="px-4 py-3 bg-[#050508] border border-white/10 rounded-xl hover:border-champagne/50 transition-colors text-xs text-ivory/80 flex items-center justify-center gap-2">
+                                                Use ProductDemo Sample of Coffee cup
+                                            </button>
+                                            <div className="relative">
+                                                <input type="file" required={!formData.customInput} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" onChange={(e) => { const f = e.target.files[0]; if(f) setFormData({...formData, customInput: `Uploaded File: ${f.name}`}); }} />
+                                                <div className="px-4 py-3 bg-[#050508] border border-white/10 rounded-xl flex items-center justify-center text-xs text-champagne font-mono border-dashed">
+                                                    {formData.customInput || 'Or Select Local Image File'}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ) : artifact.requiresInput && (
                                     <div className="bg-white/5 rounded-3xl p-6 border border-champagne/20">
                                         <label className="font-mono text-[10px] text-champagne uppercase tracking-widest block font-bold mb-4">
                                             {artifact.requiresInput === 'phone' ? 'Target Line (Format: +1...)' : 'Deployment Parameters'}
