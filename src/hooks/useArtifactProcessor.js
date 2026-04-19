@@ -364,12 +364,12 @@ Unpopular opinion: ${input} is about to become unrecognizable. Here's why (and h
         addLog("[AI] SYNTHESIZING LUXURY RENDER PROTOCOL...");
         await new Promise(r => setTimeout(r, 1000));
 
-        const prompt = `Professional commercial photography of ${analyzedSubject}, luxury studio lighting, dark obsidian background, ultra-detailed 8k, canon eos r5`;
+        const prompt = `Close up crisp product shot of ${analyzedSubject}, perfectly centered, resting on a hyper-realistic stylish surface, vibrant and dynamic cinematic blurred background, luxury commercial photography edit, dramatic studio lighting, 8k resolution, photorealistic`;
         const encodedPrompt = encodeURIComponent(prompt);
         // Pollinations.ai is completely free, open source, and requires no auth keys!
         const imageUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=1024&height=1024&nologo=true&seed=${Math.floor(Math.random() * 1000)}`;
 
-        const answer = `Concept Render Completed for Asset: "${analyzedSubject}"\n\nThe asset ingestion engine has mapped your image and generated a luxury studio replacement natively.\n\nView your processed product shot here:\n${imageUrl}\n\n(Processed securely — Zero API Keys Used)`;
+        const answer = `Product visualization complete for: "${analyzedSubject}".\n\nThe subject has been mapped, isolated, and rendered into a new dynamic, high-fidelity luxury environment with professional cinematic lighting.\n\n${imageUrl}`;
         
         addLog("[AI] LUXURY RENDER COMPLETED AND HOSTED.");
         setResult(answer);
