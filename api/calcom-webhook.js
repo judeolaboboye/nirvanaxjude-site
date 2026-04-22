@@ -86,7 +86,7 @@ export default async function handler(req, res) {
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
-                        model: "google/gemini-2.0-flash-lite-preview-02-05:free", 
+                        model: "meta-llama/llama-3.3-70b-instruct:free", 
                         messages: [
                             { role: "system", content: systemInstruction },
                             { role: "user", content: userInput }
@@ -121,19 +121,21 @@ export default async function handler(req, res) {
             console.log(`[CRM] Pushing synthesized entity payload to target DB: ${targetDbId}`);
             
             // Map the generic user fields
-            const extractedProps = {};
             for (const key in userFields) {
                const val = String(userFields[key]?.value || '');
+               const label = String(userFields[key]?.label || '').toLowerCase();
+               
                // Startups
-               if(key.toLowerCase().includes('funding') || key.toLowerCase().includes('stage')) extractedProps.funding = val;
-               if(key.toLowerCase().includes('raise') || key.toLowerCase().includes('amount')) extractedProps.raise = val;
-               if(key.toLowerCase().includes('pitch') || key.toLowerCase().includes('deck')) extractedProps.pitch = val;
-               if(key.toLowerCase().includes('list') || key.toLowerCase().includes('companies')) extractedProps.competitors = val;
-               if(key.toLowerCase().includes('additional') || key.toLowerCase().includes('notes')) extractedProps.notes = val;
+               if(label.includes('funding') || label.includes('stage')) extractedProps.funding = val;
+               if(label.includes('raise') || label.includes('amount')) extractedProps.raise = val;
+               if(label.includes('pitch') || label.includes('deck')) extractedProps.pitch = val;
+               if(label.includes('list') || label.includes('companies')) extractedProps.competitors = val;
+               if(label.includes('additional') || label.includes('notes')) extractedProps.notes = val;
+               
                // Agencies
-               if(key.toLowerCase().includes('bottleneck')) extractedProps.bottleneck = val;
-               if(key.toLowerCase().includes('revenue')) extractedProps.revenue = val;
-               if(key.toLowerCase().includes('tech') || key.toLowerCase().includes('stack')) extractedProps.tech = val;
+               if(label.includes('bottleneck')) extractedProps.bottleneck = val;
+               if(label.includes('revenue')) extractedProps.revenue = val;
+               if(label.includes('tech') || label.includes('stack')) extractedProps.tech = val;
             }
 
             const activeProperties = isStartup ? {
@@ -171,7 +173,7 @@ export default async function handler(req, res) {
                         'Notion-Version': '2022-06-28'
                     },
                     body: JSON.stringify({
-                        filter: { property: emailPropertyHeader, email: { equals: leadEmail } },
+                        filter: { property: emailPropertyHeader, rich_text: { equals: leadEmail } },
                         page_size: 1
                     })
                 });
