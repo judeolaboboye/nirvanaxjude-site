@@ -86,7 +86,7 @@ export default async function handler(req, res) {
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
-                        model: "google/gemini-2.5-flash", 
+                        model: "google/gemini-2.0-flash-lite-preview-02-05:free", 
                         messages: [
                             { role: "system", content: systemInstruction },
                             { role: "user", content: userInput }
@@ -145,7 +145,7 @@ export default async function handler(req, res) {
                 "Company Website": makeRichText(leadWebsite),
                 "Target Raise Amount?": makeRichText(extractedProps.raise),
                 "Do you have a Pitch Deck or Investment Memo ready for review?": makeRichText(extractedProps.pitch),
-                "List 1-2 companies that have already raised in your niche.": makeRichText(extractedProps.competitors),
+                "List 1-2 companies that have already raised in your niche": makeRichText(extractedProps.competitors),
                 "Additional notes/Requests": makeRichText(extractedProps.notes),
                 "AI Opinion": makeRichText(deepAnalysis)
             } : {
