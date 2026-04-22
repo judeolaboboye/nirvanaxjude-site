@@ -11,11 +11,16 @@ export default async function handler(req, res) {
     }
 
     try {
-        const payload = req.body;
-        console.log('[SYSTEM] Cal.com Webhook Received.');
+        const body = req.body;
+        const payload = Array.isArray(body) ? body[0] : body;
+        console.log('[SYSTEM] Cal.com Webhook Received. Event:', payload?.triggerEvent);
+
+        if (payload?.triggerEvent === 'BOOKING_CANCELLED') {
+             return res.status(200).json({ status: 'Ignored', reason: 'Cancellation ignored.' });
+        }
 
         // Verify Event Title to route logic securely
-        const eventTitle = payload?.triggerEvent === 'CREATION' ? payload?.payload?.title : payload?.eventTitle;
+        const eventTitle = payload?.payload?.eventTitle || payload?.payload?.title || payload?.eventTitle || '';
         const isStartup = eventTitle && eventTitle.toLowerCase().includes('startup');
         const isAgency = eventTitle && eventTitle.toLowerCase().includes('agency');
 
