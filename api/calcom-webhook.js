@@ -109,8 +109,11 @@ export default async function handler(req, res) {
         const NOTION_DATABASE_ID_AGENCIES = process.env.NOTION_DATABASE_ID_AGENCIES; 
         
         const targetDbId = isStartup ? NOTION_DATABASE_ID_STARTUPS : NOTION_DATABASE_ID_AGENCIES;
+        const emailPropertyHeader = isStartup ? "Email Address" : "Email";
 
         const makeRichText = (str) => ({ rich_text: [{ text: { content: String(str || '').substring(0, 2000) } }] });
+
+        let isNewLead = true;
 
         if (!NOTION_SECRET || !targetDbId) {
             console.error(`[CRM] Missing Notion Keys. Simulation Mode bypass.`);
@@ -158,7 +161,9 @@ export default async function handler(req, res) {
             };
 
             try {
-                await fetch('https://api.notion.com/v1/pages', {
+                let existingPageId = null;
+                // SEARCH DB FOR EXISTING LEAD
+                const searchRes = await fetch(`https://api.notion.com/v1/databases/${targetDbId}/query`, {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${NOTION_SECRET}`,
@@ -166,10 +171,38 @@ export default async function handler(req, res) {
                         'Notion-Version': '2022-06-28'
                     },
                     body: JSON.stringify({
-                        parent: { database_id: targetDbId },
-                        properties: activeProperties
+                        filter: { property: emailPropertyHeader, email: { equals: leadEmail } },
+                        page_size: 1
                     })
                 });
+
+                const searchData = await searchRes.json();
+                if (searchData.results && searchData.results.length > 0) {
+                    existingPageId = searchData.results[0].id;
+                    isNewLead = false;
+                    console.log(`[CRM] Upsert Triggered: Found existing lead at ${existingPageId}`);
+                }
+
+                // EXECUTE UPSERT (UPDATE OR CREATE)
+                const endpoint = existingPageId ? `https://api.notion.com/v1/pages/${existingPageId}` : `https://api.notion.com/v1/pages`;
+                const payloadBody = existingPageId ? { properties: activeProperties } : { parent: { database_id: targetDbId }, properties: activeProperties };
+
+                const upsertRes = await fetch(endpoint, {
+                    method: existingPageId ? 'PATCH' : 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${NOTION_SECRET}`,
+                        'Content-Type': 'application/json',
+                        'Notion-Version': '2022-06-28'
+                    },
+                    body: JSON.stringify(payloadBody)
+                });
+                
+                if (!upsertRes.ok) {
+                    const errTxt = await upsertRes.text();
+                    console.error("[CRM] UPSERT FAILED:", errTxt);
+                } else {
+                    console.log("[CRM] Upsert Successful!");
+                }
             } catch (err) {
                  console.error("[CRM] Notion SDK integration failure", err);
             }
@@ -180,24 +213,28 @@ export default async function handler(req, res) {
         const GMAIL_APP_PASSWORD = process.env.GMAIL_APP_PASSWORD;
 
         if (GMAIL_USER && GMAIL_APP_PASSWORD) {
-            console.log(`[EMAIL] Dispatching native Gmail pipeline...`);
-            let transporter = nodemailer.createTransport({
-                service: 'gmail',
-                auth: {
-                    user: GMAIL_USER,
-                    pass: GMAIL_APP_PASSWORD
-                }
-            });
+            if (!isNewLead) {
+                console.log(`[EMAIL] Lead rescheduled/updated. Skipping welcome email to avoid spam.`);
+            } else {
+                console.log(`[EMAIL] Dispatching native Gmail pipeline...`);
+                let transporter = nodemailer.createTransport({
+                    service: 'gmail',
+                    auth: {
+                        user: GMAIL_USER,
+                        pass: GMAIL_APP_PASSWORD
+                    }
+                });
 
-            await transporter.sendMail({
-                from: `"Jude @ Nirvana" <${GMAIL_USER}>`,
-                to: leadEmail,
-                subject: `Thanks for Booking , To Ensure you are in.......`,
-                html: `<p>Hi ${firstName},</p>
-                       <p>I just added you to my Calendar. I am looking forward to learning more about you & your business.</p>
-                       <p>To ensure you don't miss this, kindly add this to your calendar. I will see you on the call.</p>
-                       <p>Jude</p>`
-            });
+                await transporter.sendMail({
+                    from: `"Jude @ Nirvana" <${GMAIL_USER}>`,
+                    to: leadEmail,
+                    subject: `Thanks for Booking , To Ensure you are in.......`,
+                    html: `<p>Hi ${firstName},</p>
+                           <p>I just added you to my Calendar. I am looking forward to learning more about you & your business.</p>
+                           <p>To ensure you don't miss this, kindly add this to your calendar. I will see you on the call.</p>
+                           <p>Jude</p>`
+                });
+            }
         } else {
              console.log(`[EMAIL] Missing GMAIL env limits. Skipping email.`);
         }
