@@ -121,6 +121,7 @@ export default async function handler(req, res) {
             console.log(`[CRM] Pushing synthesized entity payload to target DB: ${targetDbId}`);
             
             // Map the generic user fields
+            const extractedProps = {};
             for (const key in userFields) {
                const val = String(userFields[key]?.value || '');
                const label = String(userFields[key]?.label || '').toLowerCase();
