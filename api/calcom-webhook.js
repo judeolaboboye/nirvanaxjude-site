@@ -86,7 +86,7 @@ export default async function handler(req, res) {
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
-                        model: "meta-llama/llama-3.3-70b-instruct:free", 
+                        model: "openrouter/free", 
                         messages: [
                             { role: "system", content: systemInstruction },
                             { role: "user", content: userInput }
@@ -128,10 +128,10 @@ export default async function handler(req, res) {
                
                // Startups
                if(label.includes('funding') || label.includes('stage')) extractedProps.funding = val;
-               if(label.includes('raise') || label.includes('amount')) extractedProps.raise = val;
-               if(label.includes('pitch') || label.includes('deck')) extractedProps.pitch = val;
-               if(label.includes('list') || label.includes('companies')) extractedProps.competitors = val;
-               if(label.includes('additional') || label.includes('notes')) extractedProps.notes = val;
+               if(label.includes('raise amount') || label.includes('target raise')) extractedProps.raise = val;
+               if(label.includes('pitch deck') || label.includes('investment memo')) extractedProps.pitch = val;
+               if(label.includes('1-2 companies') || label.includes('list 1-2')) extractedProps.competitors = val;
+               if(label.includes('additional notes') || label.includes('requests')) extractedProps.notes = val;
                
                // Agencies
                if(label.includes('bottleneck')) extractedProps.bottleneck = val;
