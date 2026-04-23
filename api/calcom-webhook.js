@@ -70,36 +70,34 @@ export default async function handler(req, res) {
 
         // 3. GEMINI AI ENRICHMENT via OpenRouter using Fast Flash Model
         console.log(`[AI] Processing strategic payload with Gemini engine...`);
-        const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY; 
+        const GEMINI_API_KEY = process.env.GEMINI_API_KEY; 
         
         const systemInstruction = "As a $10billion worth Marketing & AI Automation Expert + $100billion worth Marketing psychology and Strategist who knows this particular niche/industry well and based on the current news and trends and direction by the top G's in this niche/industry: give me your opinion. You understand their whole business from the data and pass your Opinion as a $10billion worth GTM marketer.";
         const userInput = `Go over this scraped site content: "${scrapedText}". Tell me what they sell, who they sell to (target audience), and what value they give these people. Then analyze how we can work on growing this business using Marketing & AI Automations to implement across this business. Finally, search for how ${leadName} with email ${leadEmail} fits into this business and how this should concern them when growing.`;
 
         let deepAnalysis = "AI Analysis Skipped (Missing/Failed).";
         
-        if (OPENROUTER_API_KEY) {
+        if (GEMINI_API_KEY) {
             try {
-                const aiRes = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+                const aiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`, {
                     method: "POST",
                     headers: {
-                        "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
-                        model: "openrouter/free", 
-                        messages: [
-                            { role: "system", content: systemInstruction },
-                            { role: "user", content: userInput }
-                        ]
+                        system_instruction: { parts: [{ text: systemInstruction }] },
+                        contents: [{ parts: [{ text: userInput }] }]
                     })
                 });
 
                 const aiData = await aiRes.json();
-                if (aiData.choices && aiData.choices.length > 0) {
-                    deepAnalysis = aiData.choices[0].message.content;
+                if (aiData.candidates && aiData.candidates.length > 0) {
+                    deepAnalysis = aiData.candidates[0].content.parts[0].text;
+                } else if (aiData.error) {
+                    console.error("[AI] Gemini API Error:", aiData.error.message);
                 }
             } catch (e) {
-                console.error("[AI] Error calling engine:", e);
+                console.error("[AI] Error calling Gemini engine:", e);
             }
         }
 
