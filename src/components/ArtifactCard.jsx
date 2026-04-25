@@ -55,11 +55,15 @@ const ArtifactCard = ({
                     </div>
                     
                     {!isProcessing && (
-                        <button onClick={onCloseExpansion} className="text-[var(--color-text-on-dark-muted)] hover:text-white transition-colors">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <button 
+                            onClick={onCloseExpansion} 
+                            className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-full text-[10px] font-bold tracking-widest text-[var(--color-text-on-dark-muted)] hover:text-white hover:bg-white/10 transition-all"
+                        >
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                 <line x1="18" y1="6" x2="6" y2="18"/>
                                 <line x1="6" y1="6" x2="18" y2="18"/>
                             </svg>
+                            BACK TO GRID
                         </button>
                     )}
                 </div>

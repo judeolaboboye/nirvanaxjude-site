@@ -15,6 +15,10 @@ export default {
                 accent: "#C9A84C",
                 "accent-hover": "#E2B959",
                 "accent-text": "#0C0B08",
+                // Brand Aliases
+                obsidian: "#0C0B08",
+                ivory: "#F4F1EB",
+                champagne: "#C9A84C"
             },
             fontFamily: {
                 display: ["Plus Jakarta Sans", "Inter", "sans-serif"],

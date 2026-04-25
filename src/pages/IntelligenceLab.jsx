@@ -186,30 +186,32 @@ const IntelligenceLab = () => {
             {/* THE GRID */}
             <section className="px-6 pb-24">
                 <div className="max-w-[1200px] mx-auto">
-                    <div className={`lab-grid transition-all duration-700 ${expandedArtifactId ? 'grid-cols-1' : ''}`} data-reveal data-delay="1">
-                        {artifacts.map((artifact) => (
-                            <div 
-                                key={artifact.id} 
-                                className={`transition-all duration-700 ${
-                                    expandedArtifactId === artifact.id 
-                                        ? 'col-span-full h-auto order-first' 
-                                        : expandedArtifactId 
-                                            ? 'opacity-20 scale-[0.98]' 
-                                            : 'h-full'
-                                }`}
-                            >
-                                <ArtifactCard 
-                                    artifact={artifact} 
-                                    onRunRequest={handleRunRequest}
-                                    isExpanded={expandedArtifactId === artifact.id}
-                                    onCloseExpansion={handleCloseExpansion}
-                                    isInternalProcessing={processingArtifactId === artifact.id && isProcessing}
-                                    internalLogs={processingArtifactId === artifact.id ? logs : []}
-                                    internalResult={processingArtifactId === artifact.id ? result : null}
-                                    internalNextStep={processingArtifactId === artifact.id ? nextStep : null}
-                                />
-                            </div>
-                        ))}
+                    <div data-reveal data-delay="1">
+                        <div className={`lab-grid transition-all duration-700 ${expandedArtifactId ? 'grid-cols-1' : ''}`}>
+                            {artifacts.map((artifact) => (
+                                <div 
+                                    key={artifact.id} 
+                                    className={`transition-all duration-700 ${
+                                        expandedArtifactId === artifact.id 
+                                            ? 'col-span-full h-auto order-first' 
+                                            : expandedArtifactId 
+                                                ? 'opacity-20 scale-[0.98]' 
+                                                : 'h-full'
+                                    }`}
+                                >
+                                    <ArtifactCard 
+                                        artifact={artifact} 
+                                        onRunRequest={handleRunRequest}
+                                        isExpanded={expandedArtifactId === artifact.id}
+                                        onCloseExpansion={handleCloseExpansion}
+                                        isInternalProcessing={processingArtifactId === artifact.id && isProcessing}
+                                        internalLogs={processingArtifactId === artifact.id ? logs : []}
+                                        internalResult={processingArtifactId === artifact.id ? result : null}
+                                        internalNextStep={processingArtifactId === artifact.id ? nextStep : null}
+                                    />
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </section>
@@ -234,7 +236,13 @@ const IntelligenceLab = () => {
             {/* Gatekeeper Modal */}
             <LeadCaptureModal 
                 isOpen={isModalOpen} 
-                onClose={() => setIsModalOpen(false)} 
+                onClose={() => {
+                    setIsModalOpen(false);
+                    // Only collapse if we aren't currently processing this artifact
+                    if (!isProcessing || processingArtifactId !== selectedArtifact?.id) {
+                        setExpandedArtifactId(null);
+                    }
+                }} 
                 onSuccess={handleModalSuccess}
                 artifact={selectedArtifact}
             />
