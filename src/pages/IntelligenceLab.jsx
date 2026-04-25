@@ -1,11 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import React, { useEffect, useState } from 'react';
 import ArtifactCard from '../components/ArtifactCard';
 import LeadCaptureModal from '../components/LeadCaptureModal';
 import { useArtifactProcessor } from '../hooks/useArtifactProcessor';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const ARTIFACTS_DATA = [
     {
@@ -121,13 +117,10 @@ const ARTIFACTS_DATA = [
 ];
 
 const IntelligenceLab = () => {
-    const headerRef = useRef(null);
-    const gridRef = useRef(null);
     const [artifacts, setArtifacts] = useState(ARTIFACTS_DATA);
     const [selectedArtifact, setSelectedArtifact] = useState(null);
     const [expandedArtifactId, setExpandedArtifactId] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [notifications, setNotifications] = useState([]);
     
     // Track processing state and results per artifact
     const { isProcessing, result, nextStep, logs, processArtifact } = useArtifactProcessor();
@@ -136,28 +129,15 @@ const IntelligenceLab = () => {
 
     useEffect(() => {
         window.scrollTo(0, 0);
-        let ctx = gsap.context(() => {
-            gsap.fromTo(headerRef.current.children,
-                { y: 40, opacity: 0 },
-                { y: 0, opacity: 1, duration: 1, stagger: 0.1, ease: 'power3.out', delay: 0.2 }
-            );
-
-            gsap.fromTo(".artifact-card-wrapper",
-                { y: 40, opacity: 0 },
-                { 
-                    y: 0, 
-                    opacity: 1, 
-                    duration: 0.8, 
-                    stagger: 0.1, 
-                    ease: 'power3.out',
-                    scrollTrigger: {
-                        trigger: gridRef.current,
-                        start: "top 80%"
-                    }
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                    observer.unobserve(entry.target);
                 }
-            );
-        });
-        return () => ctx.revert();
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -80px 0px' });
+        document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
     }, []);
 
     const handleRunRequest = (artifact) => {
@@ -182,78 +162,74 @@ const IntelligenceLab = () => {
         }
     };
 
-    const startArtifactProcess = (artifactId) => {
-        // This is now handled by the hook
-    };
-
     return (
-        <section className="bg-obsidian min-h-screen pt-40 pb-24 px-6 md:px-16 flex flex-col items-center relative overflow-hidden text-ivory">
-            {/* Background elements */}
-            <div className="absolute top-0 right-0 w-full max-w-3xl h-[800px] bg-champagne/5 rounded-full blur-[150px] pointer-events-none transform translate-x-1/3 -translate-y-1/3"></div>
+        <main className="bg-dark text-white min-h-screen pt-[72px]">
             
-            {/* Header */}
-            <div ref={headerRef} className="text-center w-full max-w-4xl mx-auto mb-20 relative z-10 flex flex-col items-center">
-                <p className="font-mono text-champagne mb-6 tracking-widest uppercase text-xs md:text-sm bg-champagne/10 px-4 py-2 border border-champagne/20 rounded-full w-max">
-                    Intelligence Lab
-                </p>
-                <h1 className="font-drama italic text-6xl md:text-8xl lg:text-9xl text-ivory leading-[0.9] text-balance mb-6">
-                    Live Artifacts.
-                </h1>
-                <p className="font-ui text-xl md:text-2xl text-ivory/60 max-w-2xl text-balance leading-relaxed">
-                    Test the deterministic engines powering our partner agencies. Live deployments, zero hallucinations.
-                </p>
-            </div>
-
-            {/* The Grid */}
-            <div ref={gridRef} className="w-full max-w-7xl mx-auto relative z-10">
-                <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 transition-all duration-700 ${expandedArtifactId ? 'lg:grid-cols-1' : ''}`}>
-                    {artifacts.map((artifact, i) => (
-                        <div 
-                            key={artifact.id} 
-                            className={`artifact-card-wrapper transition-all duration-700 ${
-                                expandedArtifactId === artifact.id 
-                                    ? 'col-span-full h-auto order-first' 
-                                    : expandedArtifactId 
-                                        ? 'opacity-20 scale-95' 
-                                        : 'h-full'
-                            }`}
-                        >
-                            <ArtifactCard 
-                                artifact={artifact} 
-                                onRunRequest={handleRunRequest}
-                                isExpanded={expandedArtifactId === artifact.id}
-                                onCloseExpansion={handleCloseExpansion}
-                                isInternalProcessing={processingArtifactId === artifact.id && isProcessing}
-                                internalLogs={processingArtifactId === artifact.id ? logs : []}
-                                internalResult={processingArtifactId === artifact.id ? result : null}
-                                internalNextStep={processingArtifactId === artifact.id ? nextStep : null}
-                            />
-                        </div>
-                    ))}
+            {/* HERO SECTION (Dark) */}
+            <section className="relative px-6 py-24 flex flex-col items-center justify-center min-h-[50vh] overflow-hidden text-center">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[var(--color-accent)] opacity-[0.05] rounded-full blur-[100px] pointer-events-none"></div>
+                
+                <div className="relative z-10 max-w-[800px]" data-reveal>
+                    <div className="eyebrow mx-auto justify-center">
+                        <span className="eyebrow__dot"></span>
+                        <span className="eyebrow__text text-white">INTELLIGENCE LAB</span>
+                    </div>
+                    <h1 className="text-[clamp(52px,7vw,80px)] font-[800] leading-[1.05] tracking-tight mb-6">
+                        Live Artifacts.
+                    </h1>
+                    <p className="text-[18px] leading-[1.65] text-[var(--color-text-on-dark-muted)] max-w-[600px] mx-auto">
+                        Test the deterministic engines powering our partner agencies. Live deployments, zero hallucinations.
+                    </p>
                 </div>
-            </div>
+            </section>
 
-            {/* Call to Action Wrapper */}
-            <div className="w-full max-w-5xl mx-auto mt-40">
-                <div className="bg-[#0A0A0F] border border-ivory/5 rounded-[3rem] p-16 md:p-24 text-center relative overflow-hidden group shadow-2xl">
-                    <div className="absolute inset-0 bg-gradient-to-t from-champagne/5 to-transparent pointer-events-none"></div>
-                    <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-champagne/10 blur-[100px] rounded-full group-hover:bg-champagne/20 transition-colors duration-700 pointer-events-none"></div>
+            {/* THE GRID */}
+            <section className="px-6 pb-24">
+                <div className="max-w-[1200px] mx-auto">
+                    <div className={`lab-grid transition-all duration-700 ${expandedArtifactId ? 'grid-cols-1' : ''}`} data-reveal data-delay="1">
+                        {artifacts.map((artifact) => (
+                            <div 
+                                key={artifact.id} 
+                                className={`transition-all duration-700 ${
+                                    expandedArtifactId === artifact.id 
+                                        ? 'col-span-full h-auto order-first' 
+                                        : expandedArtifactId 
+                                            ? 'opacity-20 scale-[0.98]' 
+                                            : 'h-full'
+                                }`}
+                            >
+                                <ArtifactCard 
+                                    artifact={artifact} 
+                                    onRunRequest={handleRunRequest}
+                                    isExpanded={expandedArtifactId === artifact.id}
+                                    onCloseExpansion={handleCloseExpansion}
+                                    isInternalProcessing={processingArtifactId === artifact.id && isProcessing}
+                                    internalLogs={processingArtifactId === artifact.id ? logs : []}
+                                    internalResult={processingArtifactId === artifact.id ? result : null}
+                                    internalNextStep={processingArtifactId === artifact.id ? nextStep : null}
+                                />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
 
-                    <h2 className="font-drama italic text-4xl md:text-6xl lg:text-7xl text-ivory mb-8 relative z-10 text-balance leading-[1.1]">
-                        Bypass the demos. Build the engine.
+            {/* CTA SECTION */}
+            <section className="px-6 py-24 border-t border-[var(--color-border-dark)]">
+                <div className="max-w-[1000px] mx-auto bg-[var(--color-bg-dark-card)] border border-[var(--color-border-dark)] rounded-[2rem] p-12 md:p-20 text-center relative overflow-hidden shadow-2xl" data-reveal>
+                    <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-accent)]/5 to-transparent pointer-events-none"></div>
+                    
+                    <h2 className="text-[clamp(36px,5vw,52px)] font-[800] mb-8 relative z-10 leading-[1.1]">
+                        Bypass the demos.<br/>Build the engine.
                     </h2>
                     <div className="relative z-10 flex justify-center">
-                        <a 
-                            href="https://cal.com/nirvanaxjude" 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            className="inline-block bg-champagne text-obsidian font-ui font-bold text-xl px-12 py-6 rounded-full hover:scale-105 transition-transform shadow-[0_0_40px_rgba(201,168,76,0.3)]"
-                        >
-                            Request Your Own System
+                        <a href="https://cal.com/nirvanaxjude" target="_blank" rel="noopener noreferrer" className="btn-primary">
+                            <div className="btn-primary__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+                            REQUEST YOUR OWN SYSTEM
                         </a>
                     </div>
                 </div>
-            </div>
+            </section>
 
             {/* Gatekeeper Modal */}
             <LeadCaptureModal 
@@ -262,7 +238,7 @@ const IntelligenceLab = () => {
                 onSuccess={handleModalSuccess}
                 artifact={selectedArtifact}
             />
-        </section>
+        </main>
     );
 };
 

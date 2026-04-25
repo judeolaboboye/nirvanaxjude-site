@@ -7,19 +7,20 @@ export default {
     theme: {
         extend: {
             colors: {
-                obsidian: "#0D0D12",
-                champagne: "#C9A84C",
-                ivory: "#FAF8F5",
-                slate: "#2A2A35"
+                dark: "#0C0B08",
+                "dark-card": "#161410",
+                "dark-section": "#1A1810",
+                light: "#F4F1EB",
+                "light-card": "#FFFFFF",
+                accent: "#C9A84C",
+                "accent-hover": "#E2B959",
+                "accent-text": "#0C0B08",
             },
             fontFamily: {
-                ui: ["Inter", "sans-serif"],
-                drama: ["Playfair Display", "serif"],
+                display: ["Plus Jakarta Sans", "Inter", "sans-serif"],
+                serif: ["Instrument Serif", "Georgia", "serif"],
                 mono: ["JetBrains Mono", "monospace"]
             },
-            backgroundImage: {
-                'hero-gradient': 'linear-gradient(to top, rgba(13, 13, 18, 1) 0%, rgba(13, 13, 18, 0.4) 50%, rgba(13, 13, 18, 0.1) 100%)',
-            }
         },
     },
     plugins: [],

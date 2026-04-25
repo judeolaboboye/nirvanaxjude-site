@@ -7,6 +7,7 @@ import Footer from './components/Footer';
 import StartupsPage from './pages/StartupsPage';
 import AgenciesPage from './pages/AgenciesPage';
 import IntelligenceLab from './pages/IntelligenceLab';
+import AboutPage from './pages/AboutPage';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -28,6 +29,7 @@ const App = () => {
                 <Route path="/" element={<StartupsPage />} />
                 <Route path="/agencies" element={<AgenciesPage />} />
                 <Route path="/lab" element={<IntelligenceLab />} />
+                <Route path="/about" element={<AboutPage />} />
             </Routes>
             {showFooter && <Footer />}
         </div>
