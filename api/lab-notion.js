@@ -32,13 +32,14 @@ export default async function handler(req, res) {
         });
 
         if (!apiRes.ok) {
-            const err = await apiRes.text();
-            throw new Error(`Notion Proxy Error: ${apiRes.status} -- ${err}`);
+            const err = await apiRes.json().catch(() => ({}));
+            console.error("Notion API Error Details:", err);
+            throw new Error(`Notion Proxy Error: ${apiRes.status} -- ${err.message || 'Unknown integration error'}`);
         }
 
         return res.status(200).json({ success: true });
     } catch (e) {
-        console.error(e);
+        console.error("Internal CRM Error:", e);
         return res.status(500).json({ error: e.message });
     }
 }

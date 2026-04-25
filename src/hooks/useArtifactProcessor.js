@@ -52,10 +52,14 @@ export const useArtifactProcessor = () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ artifactId, input, output, userData })
             });
-            if (response.ok) addLog("[SYSTEM] CRM LOGGING SUCCESSFUL.");
-            else addLog("[SYSTEM] CRM ERROR: Database missing or proxy failure.");
+            if (response.ok) {
+                addLog("[SYSTEM] CRM LOGGING SUCCESSFUL.");
+            } else {
+                const errData = await response.json().catch(() => ({}));
+                addLog(`[SYSTEM] CRM ERROR: ${errData.error || "Proxy rejected handshake"} (Status: ${response.status})`);
+            }
         } catch (e) {
-            addLog("[SYSTEM] CRM PROXY ERROR ACTIVE.");
+            addLog(`[SYSTEM] CRM ERROR: Connection failed (${e.message}).`);
         }
     };
 
@@ -301,7 +305,7 @@ Unpopular opinion: ${input} is about to become unrecognizable. Here's why (and h
 
         let analyzedSubject = input;
         if (input.includes('demo-product.jpg')) {
-            analyzedSubject = "minimalist black and white striped to-go coffee cup";
+            analyzedSubject = "luxury minimalist black and white striped to-go coffee cup";
             addLog(`[AI] RECOGNIZED ASSET: ${analyzedSubject.toUpperCase()}`);
         } else if (input.includes('Uploaded File:')) {
             analyzedSubject = input.replace('Uploaded File: ', '').split('.')[0].replace(/[-_]/g, ' ');
@@ -313,11 +317,11 @@ Unpopular opinion: ${input} is about to become unrecognizable. Here's why (and h
         addLog("[AI] SYNTHESIZING LUXURY RENDER PROTOCOL...");
         await new Promise(r => setTimeout(r, 1000));
 
-        const prompt = `Close up crisp product shot of ${analyzedSubject}, perfectly centered, resting on a hyper-realistic stylish surface, vibrant and dynamic cinematic blurred background, luxury commercial photography edit, dramatic studio lighting, 8k resolution, photorealistic`;
+        const prompt = `Hyper-realistic commercial product photography of ${analyzedSubject}, centered on an obsidian marble podium, soft dramatic studio rim lighting, 8k resolution, cinematic atmosphere, high-end editorial aesthetic, sharp macro focus, professional color correction.`;
         const encodedPrompt = encodeURIComponent(prompt);
         const imageUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=1024&height=1024&nologo=true&seed=${Math.floor(Math.random() * 1000)}`;
 
-        const answer = `Product visualization complete for: "${analyzedSubject}".\n\nThe subject has been mapped, isolated, and rendered into a new dynamic, high-fidelity luxury environment with professional cinematic lighting.\n\n${imageUrl}`;
+        const answer = `Product visualization complete for: "${analyzedSubject}".\n\nThe asset has been rendered in a premium environment to maximize visual impact.\n\nImage URL: ${imageUrl}`;
         
         addLog("[AI] LUXURY RENDER COMPLETED AND HOSTED.");
         setResult(answer);
