@@ -4,15 +4,15 @@ import React, { useEffect, useState } from 'react';
 const faqItems = [
     {
         q: 'How is this different from hiring a full-time fundraising consultant?',
-        a: 'A consultant gives you advice. We build and run the actual outreach system — the targeting, the emails, the follow-ups, the objection handling — and hand you meetings. You stay focused on your company. We run the raise.'
+        a: 'A consultant gives you advice. We build and run the actual outreach system. The targeting, the emails, the follow-ups, the objection handling. We hand you meetings. You stay focused on your company. We run the raise.'
     },
     {
         q: 'How long before I start seeing investor meetings on my calendar?',
-        a: "Most clients see their first replies within 7–14 days of launch. Qualified meetings typically start booking in weeks 3–6 depending on your round size and sector. We don't do slow burns. The system is built for speed."
+        a: "Most clients see their first replies within 7 to 14 days of launch. Qualified meetings typically start booking in weeks 3 to 6 depending on your round size and sector. We don't do slow burns. The system is built for speed."
     },
     {
         q: 'Do I need to have a deck or product ready before starting?',
-        a: "You need a clear thesis and a deck. We handle everything from that point — we don't build your pitch, but we put it in front of the right people, at the right time, in the right way."
+        a: "You need a clear thesis and a deck. We handle everything from that point. We don't build your pitch, but we put it in front of the right people, at the right time, in the right way."
     },
     {
         q: 'What kinds of startups do you work with?',
@@ -20,11 +20,11 @@ const faqItems = [
     },
     {
         q: 'What does the agency partnership actually look like?',
-        a: 'You scope the project with your client. We build the AI system — in n8n, Make, using Claude or custom stacks — under your brand. Your client never knows we exist. We deliver the build with full SOPs so their team can actually run it. You keep the client relationship and the margin.'
+        a: 'You scope the project with your client. We build the AI system using n8n, Make, using Claude or custom stacks, under your brand. Your client never knows we exist. We deliver the build with full SOPs so their team can actually run it. You keep the client relationship and the margin.'
     },
     {
         q: 'How do I know the outreach won\'t damage my brand with investors?',
-        a: "Every message is personalised to the specific investor's thesis and recent activity. We don't spray. We research, we personalise, and we only reach out to investors who are actually in a position to write a check at your stage. The quality of the outreach protects your reputation — it doesn't risk it."
+        a: "Every message is personalised to the specific investor's thesis and recent activity. We don't spray. We research, we personalise, and we only reach out to investors who are actually in a position to write a check at your stage. The quality of the outreach protects your reputation. It doesn't risk it."
     }
 ];
 
@@ -557,7 +557,7 @@ const StartupsPage = () => {
 
                     {/* Industries Triple Marquee */}
                     <div className="industries-marquee-wrapper mb-16" data-reveal data-delay="1">
-                        {/* Row 1 — Left */}
+                        {/* Row 1. Left */}
                         <div className="industries-row">
                             <div className="industries-track">
                                 {['SaaS & Technology','Venture-Backed Startups','Cleantech & Climate','AI Infrastructure','HealthTech','Logistics & Supply Chain','Fintech & Payments','Deep Tech','SaaS & Technology','Venture-Backed Startups','Cleantech & Climate','AI Infrastructure','HealthTech','Logistics & Supply Chain','Fintech & Payments','Deep Tech'].map((name, i) => (
@@ -570,7 +570,7 @@ const StartupsPage = () => {
                                 ))}
                             </div>
                         </div>
-                        {/* Row 2 — Right */}
+                        {/* Row 2. Right */}
                         <div className="industries-row">
                             <div className="industries-track" style={{ animationDirection: 'reverse' }}>
                                 {['B2B Software','Renewable Energy','Creator Economy','PropTech','EdTech','Cybersecurity','AgriTech','Web3 & Blockchain','B2B Software','Renewable Energy','Creator Economy','PropTech','EdTech','Cybersecurity','AgriTech','Web3 & Blockchain'].map((name, i) => (
@@ -583,7 +583,7 @@ const StartupsPage = () => {
                                 ))}
                             </div>
                         </div>
-                        {/* Row 3 — Left */}
+                        {/* Row 3. Left */}
                         <div className="industries-row">
                             <div className="industries-track">
                                 {['Consumer Apps','Defence & GovTech','BioTech & Life Sciences','E-Commerce','Mobility & Transport','Media & Entertainment','Hardware & IoT','Future of Work','Consumer Apps','Defence & GovTech','BioTech & Life Sciences','E-Commerce','Mobility & Transport','Media & Entertainment','Hardware & IoT','Future of Work'].map((name, i) => (
