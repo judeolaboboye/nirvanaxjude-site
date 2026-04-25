@@ -20,12 +20,12 @@ export default async function handler(req, res) {
             body: JSON.stringify({
                 parent: { database_id: dbId },
                 properties: {
-                    'Name': { title: [{ text: { content: payload.userData?.firstName || 'Anonymous' } }] },
-                    'Email': { email: payload.userData?.email || null },
-                    'Phone': { phone_number: payload.userData?.phone || null },
-                    'Artifact Used': { select: { name: payload.artifactId } },
-                    'User Input': { rich_text: [{ text: { content: String(payload.input || 'N/A').substring(0, 2000) } }] },
-                    'Generated Output': { rich_text: [{ text: { content: String(payload.output || 'Deployed').substring(0, 2000) } }] },
+                    'First Name': { title: [{ text: { content: payload.userData?.firstName || 'Anonymous' } }] },
+                    'Email Address': { email: payload.userData?.email || null },
+                    'Phone Number': { phone_number: payload.userData?.phone || null },
+                    'Artifact Used': { select: { name: payload.artifactId || 'General' } },
+                    'User Input Architecture': { rich_text: [{ text: { content: String(payload.input || 'N/A').substring(0, 2000) } }] },
+                    'Instance Output': { rich_text: [{ text: { content: String(payload.output || 'Deployed').substring(0, 2000) } }] },
                     'Status': { status: { name: 'New' } }
                 }
             })
