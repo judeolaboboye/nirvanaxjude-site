@@ -71,6 +71,15 @@ const Footer = () => {
                         <a href="https://instagram.com/nirvanaxjude" target="_blank" rel="noopener noreferrer" className="footer-nav__link">Instagram</a>
                         <a href="https://linkedin.com/in/nirvanaxjude" target="_blank" rel="noopener noreferrer" className="footer-nav__link">LinkedIn</a>
                     </div>
+                    <div>
+                        <div className="footer-nav__group-title">Resources</div>
+                        <Link to="/how-to-get-pre-seed-funding-for-startups" className="footer-nav__link">Pre-Seed Funding Guide</Link>
+                        <Link to="/how-investor-outreach-works" className="footer-nav__link">Investor Outreach Explained</Link>
+                        <Link to="/what-is-ai-operations-for-agencies" className="footer-nav__link">AI Ops for Agencies</Link>
+                        <Link to="/startup-funding-results" className="footer-nav__link">Startup Funding Results</Link>
+                        <Link to="/series-a-fundraising-for-founders" className="footer-nav__link">Series A Fundraising</Link>
+                    </div>
+
                 </div>
 
                 {/* VERY BOTTOM BAR */}
@@ -78,7 +87,12 @@ const Footer = () => {
                     <div className="footer-bottom__copy">
                         © 2026 NirvanaXJude. All rights reserved.<br/>
                         <span className="opacity-60">AI systems for founders raising capital and agencies that need to deliver it.</span>
+                        <div className="flex gap-4 mt-2 opacity-40">
+                            <Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
+                            <Link to="/terms" className="hover:text-white transition-colors">Terms & Conditions</Link>
+                        </div>
                     </div>
+
                     <div className="footer-social">
                         <a href="https://x.com/judeolaboboye" target="_blank" rel="noopener noreferrer" className="footer-social__btn" aria-label="Twitter">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg>

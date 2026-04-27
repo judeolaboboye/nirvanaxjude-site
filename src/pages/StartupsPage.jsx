@@ -1,4 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import SEO from '../components/SEO';
+import { PRIMARY_SCHEMA, FAQ_SCHEMA, CASE_STUDY_SCHEMA, PAGE_META, POSITION_ZERO_ANSWERS } from '../data/SEOData';
+
+
 
 // ─── FAQ Data ────────────────────────────────────────────────────────────────
 const faqItems = [
@@ -141,7 +145,7 @@ const investorProtocol = [
     {
         phase: 'STEP 05', title: 'The Handshake',
         desc: 'Meetings booked directly onto your calendar. No back and forth. You step in only when an investor is ready to have a real conversation about terms.',
-        link: 'cal.com/nirvanaxjude/investor-strategy-call',
+        link: 'cal.com/nirvanaxjude/startups-founder-inquiries',
         screenshot: 'https://nirvanaxjude.com/images/cal-dashboard-v2.png'
     },
     {
@@ -216,8 +220,15 @@ const StartupsPage = () => {
 
     return (
         <main className="bg-dark text-white pt-[72px]">
+            <SEO 
+                {...PAGE_META.home} 
+                schema={[PRIMARY_SCHEMA, FAQ_SCHEMA, CASE_STUDY_SCHEMA]} 
+                ghostAnswers={POSITION_ZERO_ANSWERS.home}
+            />
+
             {/* HERO SECTION (Dark) */}
             <section className="relative min-h-[90vh] flex items-end pb-24 overflow-hidden">
+
                 <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1800" alt="Founders" className="absolute inset-0 w-full h-full object-cover" />
                 <div className="absolute inset-0" style={{ background: 'var(--hero-overlay)' }}></div>
                 
@@ -234,6 +245,8 @@ const StartupsPage = () => {
                         <p className="text-[17px] leading-[1.65] text-[var(--color-text-on-dark-muted)] mb-4">
                             We map the right investors, land in their inbox, and book the meeting so you show up to calls, not cold outreach.
                         </p>
+
+
                         <p className="text-[14px] text-[var(--color-text-on-dark-muted)] opacity-80 mb-10">
                             Targeted research. Precision outreach. Meetings on your calendar.
                         </p>
@@ -312,6 +325,8 @@ const StartupsPage = () => {
                         Why most fundraises feel like screaming into the void.
                     </h2>
 
+
+
                     <div className="mb-24" data-reveal data-delay="2">
                         <div className="text-[96px] font-serif text-[var(--color-accent)] leading-none mb-2">6 months</div>
                         <div className="text-[14px] text-[var(--color-text-on-light-muted)]">Average time wasted on manual investor searching and pitching on VC sites</div>
@@ -389,6 +404,8 @@ const StartupsPage = () => {
                         <h2 className="text-[clamp(36px,4.5vw,48px)] font-[700] mb-8">Startups that worked on their raise. And closed it.</h2>
                         
                         <p className="font-serif italic text-[var(--color-text-on-light-muted)] max-w-[640px] text-[18px] text-center mb-2">
+
+
                             "OpenAI, Canva, Anthropic, Ramp, and Rippling use Clay's GTM development environment..." 
                         </p>
                         <div className="text-[12px] font-[600] text-[var(--color-text-on-light-muted)] uppercase tracking-widest">— Clay.com</div>
@@ -551,6 +568,8 @@ const StartupsPage = () => {
                         </div>
                         <h2 className="text-[clamp(36px,4.5vw,52px)] font-[700] mb-6">Beyond The Raise: Scaling AI Operations</h2>
                         <p className="text-[16px] text-[var(--color-text-on-light-muted)] max-w-[600px] text-center leading-[1.6]">
+
+
                             Raising capital is step one. Deploying it efficiently is step two. We serve as your fractional AI infrastructure team, deploying Autonomous Support Agents, Client Onboarding Workflows, and Internal System Automations so your new capital goes into growth, not salaries.
                         </p>
                     </div>
@@ -645,7 +664,7 @@ const StartupsPage = () => {
                             <p className="make-decisions__body">
                                 Founders and agencies come to NirvanaXJude to turn complexity into systems that work predictably, without burning out their team or their runway.
                             </p>
-                            <a href="https://cal.com/nirvanaxjude/investor-strategy-call" target="_blank" rel="noopener noreferrer" className="btn-primary">
+                            <a href="https://cal.com/nirvanaxjude/startups-founder-inquiries" target="_blank" rel="noopener noreferrer" className="btn-primary">
                                 <div className="btn-primary__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
                                 SCHEDULE STRATEGY SESSION
                             </a>

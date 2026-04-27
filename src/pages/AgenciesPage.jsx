@@ -1,6 +1,10 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import SEO from '../components/SEO';
+import { PRIMARY_SCHEMA, PAGE_META, POSITION_ZERO_ANSWERS } from '../data/SEOData';
 import TestimonialsSlider from '../components/TestimonialsSlider';
+
+
 
 const agencyFeatures = [
     { 
@@ -36,8 +40,14 @@ const AgenciesPage = () => {
 
     return (
         <main className="bg-dark text-white pt-[72px]">
-            
+            <SEO 
+                {...PAGE_META.agencies} 
+                schema={[PRIMARY_SCHEMA]} 
+                ghostAnswers={POSITION_ZERO_ANSWERS.agencies}
+            />
+
             {/* HERO SECTION (Dark) */}
+
             <section className="relative min-h-[90vh] flex items-end pb-24 overflow-hidden">
                 <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=1800" alt="Agency Team" className="absolute inset-0 w-full h-full object-cover" />
                 <div className="absolute inset-0" style={{ background: 'var(--hero-overlay)' }}></div>
@@ -55,6 +65,8 @@ const AgenciesPage = () => {
                         <p className="text-[17px] leading-[1.65] text-[var(--color-text-on-dark-muted)] mb-4">
                             Your clients are asking for AI. Most agencies can't deliver it. I'm the build layer that changes that.
                         </p>
+
+
                         <p className="text-[17px] leading-[1.65] text-[var(--color-text-on-dark-muted)] mb-10">
                             You handle the client relationship. I build what you promised.
                         </p>

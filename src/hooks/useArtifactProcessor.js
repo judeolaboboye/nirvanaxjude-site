@@ -32,7 +32,7 @@ NIRVANAXJUDE KNOWLEDGE BASE - VERIFIED FACTS ONLY:
 
 6. Content Creation Frameworks: Viral content follows the Hook → Context → Conflict → Resolution → CTA pattern. Platform specifics: LinkedIn peaks 8-10am Tuesday-Thursday; Instagram Reels algorithm weights first 30 seconds heavily.
 
-7. NirvanaXJude Services: Capital Infrastructure (investor outreach systems), AI Operations (Voice SDR, CRM architecture, lead enrichment), Agency White-Label (technical execution partner for agencies). Cal.com: https://cal.com/nirvanaxjude
+7. NirvanaXJude Services: Capital Infrastructure (investor outreach systems), AI Operations (Voice SDR, CRM architecture, lead enrichment), Agency White-Label (technical execution partner for agencies). Cal.com: https://cal.com/nirvanaxjude/startups-founder-inquiries
 `;
 
 export const useArtifactProcessor = () => {

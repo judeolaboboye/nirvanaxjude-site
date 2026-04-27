@@ -174,7 +174,7 @@ const ArtifactCard = ({
                         <div className="mt-auto bg-[var(--color-accent)] text-[var(--color-accent-text)] p-6 rounded-xl">
                             <p className="font-serif text-[24px] mb-2 italic">Architecture on Demand.</p>
                             <p className="text-[13px] mb-6 opacity-80 leading-relaxed font-[500]">This is a single deterministic module. I architect the entire neuro-symbolic engine for high-ticket service industries.</p>
-                            <a href="https://cal.com/nirvanaxjude" target="_blank" rel="noopener noreferrer" className="block w-full text-center bg-[var(--color-accent-text)] text-[var(--color-accent)] font-bold py-4 px-6 rounded-lg text-[13px] tracking-wide">
+                            <a href="https://cal.com/nirvanaxjude/startups-founder-inquiries" target="_blank" rel="noopener noreferrer" className="block w-full text-center bg-[var(--color-accent-text)] text-[var(--color-accent)] font-bold py-4 px-6 rounded-lg text-[13px] tracking-wide">
                                 ARCHITECT CUSTOM SYSTEM
                             </a>
                         </div>

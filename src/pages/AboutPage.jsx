@@ -1,4 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
+import SEO from '../components/SEO';
+import { PRIMARY_SCHEMA, PAGE_META } from '../data/SEOData';
+
 
 const AboutPage = () => {
     useEffect(() => {
@@ -28,7 +31,12 @@ const AboutPage = () => {
 
     return (
         <main className="bg-dark text-white min-h-screen pt-[72px]">
+            <SEO 
+                {...PAGE_META.about} 
+                schema={[PRIMARY_SCHEMA]} 
+            />
             {/* HERO SPLIT LAYOUT */}
+
             <section className="pt-[88px] pb-24 px-6 relative">
                 <div className="max-w-[1200px] mx-auto">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">

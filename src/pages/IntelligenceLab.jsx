@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import ArtifactCard from '../components/ArtifactCard';
 import LeadCaptureModal from '../components/LeadCaptureModal';
 import { useArtifactProcessor } from '../hooks/useArtifactProcessor';
+import SEO from '../components/SEO';
+import { PRIMARY_SCHEMA, PAGE_META } from '../data/SEOData';
+
 
 const ARTIFACTS_DATA = [
     {
@@ -164,8 +167,12 @@ const IntelligenceLab = () => {
 
     return (
         <main className="bg-dark text-white min-h-screen pt-[72px]">
-            
+            <SEO 
+                {...PAGE_META.lab} 
+                schema={[PRIMARY_SCHEMA]} 
+            />
             {/* HERO SECTION (Dark) */}
+
             <section className="relative px-6 py-24 flex flex-col items-center justify-center min-h-[50vh] overflow-hidden text-center">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[var(--color-accent)] opacity-[0.05] rounded-full blur-[100px] pointer-events-none"></div>
                 
@@ -225,7 +232,7 @@ const IntelligenceLab = () => {
                         Bypass the demos.<br/>Build the engine.
                     </h2>
                     <div className="relative z-10 flex justify-center">
-                        <a href="https://cal.com/nirvanaxjude" target="_blank" rel="noopener noreferrer" className="btn-primary">
+                        <a href="https://cal.com/nirvanaxjude/startups-founder-inquiries" target="_blank" rel="noopener noreferrer" className="btn-primary">
                             <div className="btn-primary__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
                             REQUEST YOUR OWN SYSTEM
                         </a>

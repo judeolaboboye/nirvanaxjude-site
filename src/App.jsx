@@ -8,6 +8,16 @@ import StartupsPage from './pages/StartupsPage';
 import AgenciesPage from './pages/AgenciesPage';
 import IntelligenceLab from './pages/IntelligenceLab';
 import AboutPage from './pages/AboutPage';
+import { 
+    PreSeedFundingPage, 
+    InvestorOutreachExplainedPage, 
+    AIOpsForAgenciesPage, 
+    StartupFundingResultsPage, 
+    SeriesAFundraisingPage 
+} from './pages/AnswerKitPages';
+import { PrivacyPolicyPage, TermsAndConditionsPage } from './pages/LegalPages';
+
+
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -30,6 +40,15 @@ const App = () => {
                 <Route path="/agencies" element={<AgenciesPage />} />
                 <Route path="/lab" element={<IntelligenceLab />} />
                 <Route path="/about" element={<AboutPage />} />
+                <Route path="/how-to-get-pre-seed-funding-for-startups" element={<PreSeedFundingPage />} />
+                <Route path="/how-investor-outreach-works" element={<InvestorOutreachExplainedPage />} />
+                <Route path="/what-is-ai-operations-for-agencies" element={<AIOpsForAgenciesPage />} />
+                <Route path="/startup-funding-results" element={<StartupFundingResultsPage />} />
+                <Route path="/series-a-fundraising-for-founders" element={<SeriesAFundraisingPage />} />
+                <Route path="/privacy" element={<PrivacyPolicyPage />} />
+                <Route path="/terms" element={<TermsAndConditionsPage />} />
+
+
             </Routes>
             {showFooter && <Footer />}
         </div>
