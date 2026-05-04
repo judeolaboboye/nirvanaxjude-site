@@ -1,6 +1,21 @@
 // VERCEL API: /api/lab-notion.js
+const rateLimitMap = new Map();
+const checkRateLimit = (ip) => {
+    const now = Date.now();
+    const user = rateLimitMap.get(ip);
+    if (!user || now - user.startTime > 60000) { rateLimitMap.set(ip, { count: 1, startTime: now }); return true; }
+    if (user.count >= 50) return false;
+    user.count += 1;
+    return true;
+};
+const sanitize = (str) => typeof str === 'string' ? str.replace(/[<>]/g, '').trim() : str;
+
 export default async function handler(req, res) {
+    if (req.method === 'OPTIONS') return res.status(200).end();
     if (req.method !== 'POST') return res.status(405).json({ error: 'Method Not Allowed' });
+
+    const ip = req.headers['x-forwarded-for'] || 'unknown';
+    if (!checkRateLimit(ip)) return res.status(429).json({ error: 'Rate limit exceeded. Try again in a minute.' });
 
     const key = process.env.NOTION_SECRET;
     // The "Website" database, not the startup or agency ones!
@@ -9,7 +24,16 @@ export default async function handler(req, res) {
     if (!key || !dbId) return res.status(500).json({ error: 'Missing CRM Configuration in Stealth Mode' });
 
     try {
-        const payload = req.body;
+        const payload = {
+            userData: {
+                firstName: sanitize(req.body.userData?.firstName),
+                email: sanitize(req.body.userData?.email),
+                phone: sanitize(req.body.userData?.phone)
+            },
+            artifactId: sanitize(req.body.artifactId),
+            input: sanitize(req.body.input),
+            output: sanitize(req.body.output)
+        };
         const apiRes = await fetch('https://api.notion.com/v1/pages', {
             method: 'POST',
             headers: {
